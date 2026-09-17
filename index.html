@@ -4,48 +4,68 @@
     --bg: #faf8f3; --karte: #ffffff; --text: #23201a; --gedaempft: #6f6a5e;
     --rand: #e8e3d8; --gruen: #4d7c2f; --blau: #2f5d8f;
     --orange: #c2620d; --rot: #a83232; --lila: #6b4d8f;
+    --tuerkis: #17706b; --sand: #a8842c;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
       --bg: #1a1815; --karte: #232019; --text: #ede9e0; --gedaempft: #a39c8e;
       --rand: #35302a; --gruen: #8fc45f; --blau: #7aaede;
       --orange: #e89142; --rot: #e07a7a; --lila: #b596d8;
+      --tuerkis: #5fc4be; --sand: #d8b562;
     }
   }
   :root[data-theme="dark"] {
     --bg: #1a1815; --karte: #232019; --text: #ede9e0; --gedaempft: #a39c8e;
     --rand: #35302a; --gruen: #8fc45f; --blau: #7aaede;
     --orange: #e89142; --rot: #e07a7a; --lila: #b596d8;
+    --tuerkis: #5fc4be; --sand: #d8b562;
   }
   * { box-sizing: border-box; }
   body {
     background: var(--bg); color: var(--text); margin: 0;
     font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
-    line-height: 1.55; padding: 2rem 1rem 3.5rem;
-    font-size: 17px;
+    line-height: 1.55; padding: 2rem 1rem 3.5rem; font-size: 17px;
   }
-  .huelle { max-width: 60rem; margin: 0 auto; }
-  h1 { font-size: 1.85rem; margin: 0 0 .25rem; font-weight: 650; }
+  .huelle { max-width: 62rem; margin: 0 auto; }
+  h1 { font-size: 1.85rem; margin: 0 0 .25rem; font-weight: 650;
+       text-wrap: balance; }
   .stand { color: var(--gedaempft); font-size: .9rem; margin-bottom: 1.75rem; }
   .kacheln {
     display: grid; gap: .75rem; margin-bottom: 2rem;
-    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr));
   }
   .kachel {
     background: var(--karte); border: 1px solid var(--rand);
     border-radius: .7rem; padding: .9rem 1rem;
   }
   .kachel .titel {
-    font-size: .78rem; color: var(--gedaempft); margin-bottom: .3rem;
+    font-size: .76rem; color: var(--gedaempft); margin-bottom: .3rem;
     text-transform: uppercase; letter-spacing: .04em;
   }
-  .kachel .wert { font-size: 1.7rem; font-weight: 650; }
-  .kachel .einheit { font-size: .9rem; color: var(--gedaempft); font-weight: 400; }
+  .kachel .wert { font-size: 1.65rem; font-weight: 650;
+                  font-variant-numeric: tabular-nums; }
+  .kachel .einheit { font-size: .88rem; color: var(--gedaempft);
+                     font-weight: 400; }
   .karte {
     background: var(--karte); border: 1px solid var(--rand);
     border-radius: .7rem; padding: 1.1rem; margin-bottom: 1.5rem;
   }
   .karte h2 { font-size: 1.05rem; margin: 0 0 1rem; font-weight: 600; }
+  .waehler { display: flex; gap: .4rem; margin-bottom: 1.5rem;
+             flex-wrap: wrap; }
+  .waehler button {
+    font: inherit; font-size: .92rem; padding: .45rem 1.1rem;
+    border: 1px solid var(--rand); background: var(--karte);
+    color: var(--gedaempft); border-radius: 2rem; cursor: pointer;
+    transition: background .15s, color .15s, border-color .15s;
+  }
+  .waehler button:hover { border-color: var(--gedaempft); }
+  .waehler button[aria-pressed="true"] {
+    background: var(--text); color: var(--bg); border-color: var(--text);
+    font-weight: 600;
+  }
+  .waehler button:focus-visible { outline: 2px solid var(--blau);
+                                  outline-offset: 2px; }
   .legende {
     display: flex; flex-wrap: wrap; gap: 1rem;
     font-size: .82rem; color: var(--gedaempft); margin-bottom: .8rem;
@@ -55,55 +75,32 @@
   .diagramm { overflow-x: auto; }
   svg { display: block; }
   .tabelle-huelle { overflow-x: auto; }
-  table { border-collapse: collapse; width: 100%; font-size: .92rem;
-           font-variant-numeric: tabular-nums;
-           min-width: 34rem; }
-  th, td { padding: .5rem .6rem; text-align: right; border-bottom: 1px solid var(--rand); }
+  table { border-collapse: collapse; width: 100%; font-size: .9rem;
+          font-variant-numeric: tabular-nums; min-width: 40rem; }
+  th, td { padding: .5rem .55rem; text-align: right;
+           border-bottom: 1px solid var(--rand); }
   th:first-child, td:first-child { text-align: left; }
-  th { color: var(--gedaempft); font-weight: 600; font-size: .78rem;
-        text-transform: uppercase; letter-spacing: .03em; }
+  th { color: var(--gedaempft); font-weight: 600; font-size: .76rem;
+       text-transform: uppercase; letter-spacing: .03em; }
   tbody tr:last-child td { border-bottom: none; }
   .fuss { color: var(--gedaempft); font-size: .82rem; margin-top: 2rem; }
+  .fuss p { margin: .4rem 0; }
 </style>
 
 <div class="huelle">
   <h1>Strom vom Dach</h1>
-  <div class="stand">Letzte 30 Tage &middot;
-    Stand 17.09.2026, 16:04 Uhr</div>
+  <div class="stand" id="stand"></div>
 
-  <div class="kacheln">
-    <div class="kachel">
-      <div class="titel">Erzeugt</div>
-      <div class="wert" style="color:var(--gruen)">2024
-        <span class="einheit">kWh</span></div>
-    </div>
-    <div class="kachel">
-      <div class="titel">Verbraucht</div>
-      <div class="wert" style="color:var(--blau)">1262
-        <span class="einheit">kWh</span></div>
-    </div>
-    <div class="kachel">
-      <div class="titel">Eingespeist</div>
-      <div class="wert" style="color:var(--orange)">1187
-        <span class="einheit">kWh</span></div>
-    </div>
-    <div class="kachel">
-      <div class="titel">Aus dem Netz</div>
-      <div class="wert" style="color:var(--rot)">425
-        <span class="einheit">kWh</span></div>
-    </div>
-    <div class="kachel">
-      <div class="titel">Selbst genutzt</div>
-      <div class="wert">41<span class="einheit">%</span></div>
-    </div>
-    <div class="kachel">
-      <div class="titel">Autarkie</div>
-      <div class="wert">66<span class="einheit">%</span></div>
-    </div>
+  <div class="waehler" role="group" aria-label="Zeitraum">
+    <button type="button" data-ebene="tag" aria-pressed="true">Tage</button>
+    <button type="button" data-ebene="monat" aria-pressed="false">Monate</button>
+    <button type="button" data-ebene="jahr" aria-pressed="false">Jahre</button>
   </div>
 
+  <div class="kacheln" id="kacheln"></div>
+
   <div class="karte">
-    <h2>Erzeugung und Verbrauch je Tag</h2>
+    <h2>Erzeugung und Verbrauch</h2>
     <div class="legende">
       <span><i class="punkt" style="background:var(--gruen)"></i>Erzeugt</span>
       <span><i class="punkt" style="background:var(--blau)"></i>Verbraucht</span>
@@ -112,7 +109,7 @@
   </div>
 
   <div class="karte">
-    <h2>Netz: Einspeisung und Bezug je Tag</h2>
+    <h2>Netz: Einspeisung und Bezug</h2>
     <div class="legende">
       <span><i class="punkt" style="background:var(--orange)"></i>Eingespeist</span>
       <span><i class="punkt" style="background:var(--rot)"></i>Aus dem Netz</span>
@@ -121,11 +118,20 @@
   </div>
 
   <div class="karte">
-    <h2>Warmwasser-Boiler je Tag</h2>
+    <h2>Batterie: Laden und Entladen</h2>
+    <div class="legende">
+      <span><i class="punkt" style="background:var(--tuerkis)"></i>Geladen</span>
+      <span><i class="punkt" style="background:var(--sand)"></i>Entladen</span>
+    </div>
+    <div class="diagramm" id="d3"></div>
+  </div>
+
+  <div class="karte">
+    <h2>Warmwasser-Boiler</h2>
     <div class="legende">
       <span><i class="punkt" style="background:var(--lila)"></i>Boiler</span>
     </div>
-    <div class="diagramm" id="d3"></div>
+    <div class="diagramm" id="d4"></div>
   </div>
 
   <div class="karte">
@@ -133,8 +139,9 @@
     <div class="tabelle-huelle">
       <table>
         <thead><tr>
-          <th>Tag</th><th>Erzeugt</th><th>Verbraucht</th>
-          <th>Eingespeist</th><th>Netzbezug</th><th>Boiler</th>
+          <th id="kopf-zeit">Tag</th><th>Erzeugt</th><th>Verbraucht</th>
+          <th>Eingespeist</th><th>Netzbezug</th>
+          <th>Batt. laden</th><th>Batt. entladen</th><th>Boiler</th>
         </tr></thead>
         <tbody id="tabelle"></tbody>
       </table>
@@ -142,32 +149,68 @@
   </div>
 
   <div class="fuss">
-    Werte in Kilowattstunden (kWh). &bdquo;Selbst genutzt&ldquo; ist der Anteil
-    der Erzeugung, der nicht ins Netz ging. &bdquo;Autarkie&ldquo; ist der
-    Anteil des Verbrauchs, der ohne Netzstrom gedeckt wurde.
-    Die Seite wird t&auml;glich neu erzeugt.
+    <p>Alle Werte in Kilowattstunden (kWh).</p>
+    <p><strong>Selbst genutzt</strong> ist der Anteil der Erzeugung, der nicht
+      ins Netz ging. <strong>Autarkie</strong> ist der Anteil des Verbrauchs,
+      der ohne Netzstrom gedeckt wurde.</p>
+    <p>Die Seite wird jede Nacht neu erzeugt. Monats- und Jahreswerte sind
+      Summen der jeweils erfassten Tage &ndash; angefangene Zeitr&auml;ume
+      sind entsprechend unvollst&auml;ndig.</p>
   </div>
 </div>
 
 <script>
-const daten = [{"datum": "19.08.", "wochentag": "Mi", "erzeugt": 97.6, "verbraucht": 26.0, "eingespeist": 76.5, "bezogen": 4.9, "boiler": 0}, {"datum": "20.08.", "wochentag": "Do", "erzeugt": 33.4, "verbraucht": 46.0, "eingespeist": 9.3, "bezogen": 22.0, "boiler": 0}, {"datum": "21.08.", "wochentag": "Fr", "erzeugt": 12.9, "verbraucht": 20.8, "eingespeist": 1.3, "bezogen": 9.2, "boiler": 0}, {"datum": "22.08.", "wochentag": "Sa", "erzeugt": 62.6, "verbraucht": 39.9, "eingespeist": 28.8, "bezogen": 6.1, "boiler": 0}, {"datum": "23.08.", "wochentag": "So", "erzeugt": 94.9, "verbraucht": 37.9, "eingespeist": 60.6, "bezogen": 3.5, "boiler": 0}, {"datum": "24.08.", "wochentag": "Mo", "erzeugt": 85.8, "verbraucht": 27.2, "eingespeist": 60.9, "bezogen": 2.2, "boiler": 0}, {"datum": "25.08.", "wochentag": "Di", "erzeugt": 41.3, "verbraucht": 51.3, "eingespeist": 14.2, "bezogen": 24.3, "boiler": 0}, {"datum": "26.08.", "wochentag": "Mi", "erzeugt": 78.3, "verbraucht": 24.2, "eingespeist": 58.7, "bezogen": 4.6, "boiler": 0}, {"datum": "27.08.", "wochentag": "Do", "erzeugt": 70.9, "verbraucht": 62.7, "eingespeist": 31.9, "bezogen": 23.7, "boiler": 0}, {"datum": "28.08.", "wochentag": "Fr", "erzeugt": 32.9, "verbraucht": 30.2, "eingespeist": 10.9, "bezogen": 8.2, "boiler": 0}, {"datum": "29.08.", "wochentag": "Sa", "erzeugt": 81.9, "verbraucht": 34.0, "eingespeist": 51.8, "bezogen": 3.9, "boiler": 0}, {"datum": "30.08.", "wochentag": "So", "erzeugt": 89.8, "verbraucht": 62.9, "eingespeist": 38.3, "bezogen": 11.4, "boiler": 2.5}, {"datum": "31.08.", "wochentag": "Mo", "erzeugt": 62.9, "verbraucht": 69.5, "eingespeist": 26.2, "bezogen": 32.9, "boiler": 18.7}, {"datum": "01.09.", "wochentag": "Di", "erzeugt": 96.4, "verbraucht": 50.1, "eingespeist": 60.0, "bezogen": 13.7, "boiler": 14.1}, {"datum": "02.09.", "wochentag": "Mi", "erzeugt": 79.3, "verbraucht": 62.5, "eingespeist": 47.5, "bezogen": 30.6, "boiler": 11.6}, {"datum": "03.09.", "wochentag": "Do", "erzeugt": 72.1, "verbraucht": 64.2, "eingespeist": 34.0, "bezogen": 26.1, "boiler": 12.1}, {"datum": "04.09.", "wochentag": "Fr", "erzeugt": 95.3, "verbraucht": 37.8, "eingespeist": 67.8, "bezogen": 10.2, "boiler": 12.3}, {"datum": "05.09.", "wochentag": "Sa", "erzeugt": 27.8, "verbraucht": 20.2, "eingespeist": 15.5, "bezogen": 8.0, "boiler": 3.8}, {"datum": "06.09.", "wochentag": "So", "erzeugt": 94.8, "verbraucht": 34.5, "eingespeist": 67.7, "bezogen": 7.4, "boiler": 15.8}, {"datum": "07.09.", "wochentag": "Mo", "erzeugt": 51.7, "verbraucht": 27.7, "eingespeist": 33.2, "bezogen": 9.2, "boiler": 9.9}, {"datum": "08.09.", "wochentag": "Di", "erzeugt": 84.8, "verbraucht": 30.4, "eingespeist": 62.5, "bezogen": 8.0, "boiler": 10.4}, {"datum": "09.09.", "wochentag": "Mi", "erzeugt": 7.5, "verbraucht": 38.6, "eingespeist": 0.5, "bezogen": 31.6, "boiler": 0.0}, {"datum": "10.09.", "wochentag": "Do", "erzeugt": 42.6, "verbraucht": 48.7, "eingespeist": 19.3, "bezogen": 25.5, "boiler": 15.2}, {"datum": "11.09.", "wochentag": "Fr", "erzeugt": 89.6, "verbraucht": 47.2, "eingespeist": 53.4, "bezogen": 10.9, "boiler": 21.0}, {"datum": "12.09.", "wochentag": "Sa", "erzeugt": 95.1, "verbraucht": 59.5, "eingespeist": 55.0, "bezogen": 19.4, "boiler": 16.9}, {"datum": "13.09.", "wochentag": "So", "erzeugt": 73.1, "verbraucht": 50.8, "eingespeist": 43.5, "bezogen": 21.1, "boiler": 14.0}, {"datum": "14.09.", "wochentag": "Mo", "erzeugt": 90.0, "verbraucht": 39.5, "eingespeist": 60.5, "bezogen": 10.0, "boiler": 15.3}, {"datum": "15.09.", "wochentag": "Di", "erzeugt": 92.4, "verbraucht": 42.8, "eingespeist": 60.0, "bezogen": 10.4, "boiler": 18.2}, {"datum": "16.09.", "wochentag": "Mi", "erzeugt": 17.9, "verbraucht": 32.4, "eingespeist": 7.2, "bezogen": 21.6, "boiler": 5.1}, {"datum": "17.09.", "wochentag": "Do", "erzeugt": 68.0, "verbraucht": 42.8, "eingespeist": 30.0, "bezogen": 4.7, "boiler": 17.9}];
+const ALLE = {"tag": [{"datum": "19.08.", "wochentag": "Mi", "erzeugt": 97.6, "verbraucht": 26.0, "eingespeist": 76.5, "bezogen": 4.9, "boiler": 0, "geladen": 4.9, "entladen": 3.9}, {"datum": "20.08.", "wochentag": "Do", "erzeugt": 33.4, "verbraucht": 46.0, "eingespeist": 9.3, "bezogen": 22.0, "boiler": 0, "geladen": 5.2, "entladen": 4.7}, {"datum": "21.08.", "wochentag": "Fr", "erzeugt": 12.9, "verbraucht": 20.8, "eingespeist": 1.3, "bezogen": 9.2, "boiler": 0, "geladen": 4.0, "entladen": 3.3}, {"datum": "22.08.", "wochentag": "Sa", "erzeugt": 62.6, "verbraucht": 39.9, "eingespeist": 28.8, "bezogen": 6.1, "boiler": 0, "geladen": 7.1, "entladen": 5.3}, {"datum": "23.08.", "wochentag": "So", "erzeugt": 94.9, "verbraucht": 37.9, "eingespeist": 60.6, "bezogen": 3.5, "boiler": 0, "geladen": 4.9, "entladen": 2.9}, {"datum": "24.08.", "wochentag": "Mo", "erzeugt": 85.8, "verbraucht": 27.2, "eingespeist": 60.9, "bezogen": 2.2, "boiler": 0, "geladen": 4.9, "entladen": 5.7}, {"datum": "25.08.", "wochentag": "Di", "erzeugt": 41.3, "verbraucht": 51.3, "eingespeist": 14.2, "bezogen": 24.3, "boiler": 0, "geladen": 7.6, "entladen": 7.0}, {"datum": "26.08.", "wochentag": "Mi", "erzeugt": 78.3, "verbraucht": 24.2, "eingespeist": 58.7, "bezogen": 4.6, "boiler": 0, "geladen": 5.2, "entladen": 3.8}, {"datum": "27.08.", "wochentag": "Do", "erzeugt": 70.9, "verbraucht": 62.7, "eingespeist": 31.9, "bezogen": 23.7, "boiler": 0, "geladen": 7.4, "entladen": 7.0}, {"datum": "28.08.", "wochentag": "Fr", "erzeugt": 32.9, "verbraucht": 30.2, "eingespeist": 10.9, "bezogen": 8.2, "boiler": 0, "geladen": 6.5, "entladen": 5.5}, {"datum": "29.08.", "wochentag": "Sa", "erzeugt": 81.9, "verbraucht": 34.0, "eingespeist": 51.8, "bezogen": 3.9, "boiler": 0, "geladen": 5.2, "entladen": 2.4}, {"datum": "30.08.", "wochentag": "So", "erzeugt": 89.8, "verbraucht": 62.9, "eingespeist": 38.3, "bezogen": 11.4, "boiler": 2.5, "geladen": 7.0, "entladen": 8.0}, {"datum": "31.08.", "wochentag": "Mo", "erzeugt": 62.9, "verbraucht": 69.5, "eingespeist": 26.2, "bezogen": 32.9, "boiler": 18.7, "geladen": 6.8, "entladen": 5.7}, {"datum": "01.09.", "wochentag": "Di", "erzeugt": 96.4, "verbraucht": 50.1, "eingespeist": 60.0, "bezogen": 13.7, "boiler": 14.1, "geladen": 5.3, "entladen": 4.5}, {"datum": "02.09.", "wochentag": "Mi", "erzeugt": 79.3, "verbraucht": 62.5, "eingespeist": 47.5, "bezogen": 30.6, "boiler": 11.6, "geladen": 5.5, "entladen": 4.7}, {"datum": "03.09.", "wochentag": "Do", "erzeugt": 72.1, "verbraucht": 64.2, "eingespeist": 34.0, "bezogen": 26.1, "boiler": 12.1, "geladen": 5.8, "entladen": 0.9}, {"datum": "04.09.", "wochentag": "Fr", "erzeugt": 95.3, "verbraucht": 37.8, "eingespeist": 67.8, "bezogen": 10.2, "boiler": 12.3, "geladen": 0.0, "entladen": 0.0}, {"datum": "05.09.", "wochentag": "Sa", "erzeugt": 27.8, "verbraucht": 20.2, "eingespeist": 15.5, "bezogen": 8.0, "boiler": 3.8, "geladen": 0.0, "entladen": 0.0}, {"datum": "06.09.", "wochentag": "So", "erzeugt": 94.8, "verbraucht": 34.5, "eingespeist": 67.7, "bezogen": 7.4, "boiler": 15.8, "geladen": 0.0, "entladen": 0.0}, {"datum": "07.09.", "wochentag": "Mo", "erzeugt": 51.7, "verbraucht": 27.7, "eingespeist": 33.2, "bezogen": 9.2, "boiler": 9.9, "geladen": 0, "entladen": 0}, {"datum": "08.09.", "wochentag": "Di", "erzeugt": 84.8, "verbraucht": 30.4, "eingespeist": 62.5, "bezogen": 8.0, "boiler": 10.4, "geladen": 0, "entladen": 0}, {"datum": "09.09.", "wochentag": "Mi", "erzeugt": 7.5, "verbraucht": 38.6, "eingespeist": 0.5, "bezogen": 31.6, "boiler": 0.0, "geladen": 0, "entladen": 0}, {"datum": "10.09.", "wochentag": "Do", "erzeugt": 42.6, "verbraucht": 48.7, "eingespeist": 19.3, "bezogen": 25.5, "boiler": 15.2, "geladen": 0, "entladen": 0}, {"datum": "11.09.", "wochentag": "Fr", "erzeugt": 89.6, "verbraucht": 47.2, "eingespeist": 53.4, "bezogen": 10.9, "boiler": 21.0, "geladen": 0, "entladen": 0}, {"datum": "12.09.", "wochentag": "Sa", "erzeugt": 95.1, "verbraucht": 59.5, "eingespeist": 55.0, "bezogen": 19.4, "boiler": 16.9, "geladen": 0, "entladen": 0}, {"datum": "13.09.", "wochentag": "So", "erzeugt": 73.1, "verbraucht": 50.8, "eingespeist": 43.5, "bezogen": 21.1, "boiler": 14.0, "geladen": 0, "entladen": 0}, {"datum": "14.09.", "wochentag": "Mo", "erzeugt": 90.0, "verbraucht": 39.5, "eingespeist": 60.5, "bezogen": 10.0, "boiler": 15.3, "geladen": 0, "entladen": 0}, {"datum": "15.09.", "wochentag": "Di", "erzeugt": 92.4, "verbraucht": 42.8, "eingespeist": 60.0, "bezogen": 10.4, "boiler": 18.2, "geladen": 0, "entladen": 0}, {"datum": "16.09.", "wochentag": "Mi", "erzeugt": 17.9, "verbraucht": 32.4, "eingespeist": 7.2, "bezogen": 21.6, "boiler": 5.1, "geladen": 0.1, "entladen": 0.0}, {"datum": "17.09.", "wochentag": "Do", "erzeugt": 68.0, "verbraucht": 42.8, "eingespeist": 30.0, "bezogen": 4.7, "boiler": 17.9, "geladen": 1.4, "entladen": 0.9}], "monat": [{"erzeugt": 450.2, "verbraucht": 0.0, "eingespeist": 359.5, "bezogen": 69.1, "boiler": 0.0, "geladen": 0.0, "entladen": 0.0, "datum": "Jun 26", "wochentag": "6 T"}, {"erzeugt": 2662.8, "verbraucht": 750.6, "eingespeist": 2043.2, "bezogen": 452.1, "boiler": 0.0, "geladen": 0.0, "entladen": 0.0, "datum": "Jul 26", "wochentag": "31 T"}, {"erzeugt": 2279.4, "verbraucht": 1167.2, "eingespeist": 1492.3, "bezogen": 379.8, "boiler": 21.2, "geladen": 82.8, "entladen": 70.3, "datum": "Aug 26", "wochentag": "31 T"}, {"erzeugt": 1178.4, "verbraucht": 729.7, "eingespeist": 717.6, "bezogen": 268.4, "boiler": 213.6, "geladen": 18.1, "entladen": 11.0, "datum": "Sep 26", "wochentag": "17 T"}], "jahr": [{"erzeugt": 6570.8, "verbraucht": 2647.5, "eingespeist": 4612.6, "bezogen": 1169.4, "boiler": 234.8, "geladen": 100.9, "entladen": 81.3, "datum": "2026", "wochentag": "85 T"}]};
+const STAND = "17.09.2026, 16:15";
+let ebene = "tag";
 
 function farbe(n) {
   return getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 }
 
-function balken(ziel, felder, farben) {
+function summe(reihen, feld) {
+  return reihen.reduce((a, r) => a + r[feld], 0);
+}
+
+function zeichneKacheln(reihen) {
+  const s = {};
+  ["erzeugt","verbraucht","eingespeist","bezogen","geladen","entladen"]
+    .forEach(f => s[f] = summe(reihen, f));
+  const quote = s.erzeugt ? Math.round(100*(s.erzeugt-s.eingespeist)/s.erzeugt) : 0;
+  const autarkie = s.verbraucht
+    ? Math.round(100*(s.verbraucht-s.bezogen)/s.verbraucht) : 0;
+  const k = [
+    ["Erzeugt", s.erzeugt.toFixed(0), "kWh", "--gruen"],
+    ["Verbraucht", s.verbraucht.toFixed(0), "kWh", "--blau"],
+    ["Eingespeist", s.eingespeist.toFixed(0), "kWh", "--orange"],
+    ["Aus dem Netz", s.bezogen.toFixed(0), "kWh", "--rot"],
+    ["Batterie geladen", s.geladen.toFixed(0), "kWh", "--tuerkis"],
+    ["Batterie entladen", s.entladen.toFixed(0), "kWh", "--sand"],
+    ["Selbst genutzt", quote, "%", null],
+    ["Autarkie", autarkie, "%", null],
+  ];
+  document.getElementById("kacheln").innerHTML = k.map(([t,w,e,c]) =>
+    `<div class="kachel"><div class="titel">${t}</div>
+     <div class="wert"${c ? ` style="color:var(${c})"` : ""}>${w}
+     <span class="einheit">${e}</span></div></div>`).join("");
+}
+
+function balken(ziel, reihen, felder, farben) {
   const el = document.getElementById(ziel);
-  const n = daten.length;
-  const bw = 26, luecke = 8, links = 44, oben = 12, hoehe = 190;
-  const breite = links + n * (bw + luecke) + 12;
+  const n = reihen.length;
+  if (!n) { el.innerHTML = '<p style="color:var(--gedaempft)">Keine Daten</p>';
+            return; }
+  const bw = n > 20 ? 22 : 34, luecke = n > 20 ? 7 : 12;
+  const links = 46, oben = 12, hoehe = 195;
+  const breite = links + n * (bw + luecke) + 14;
   let max = 0;
-  daten.forEach(d => felder.forEach(f => { if (d[f] > max) max = d[f]; }));
-  max = Math.ceil(max / 10) * 10 || 10;
+  reihen.forEach(d => felder.forEach(f => { if (d[f] > max) max = d[f]; }));
+  const stufe = max > 400 ? 100 : max > 100 ? 25 : max > 20 ? 5 : 1;
+  max = Math.ceil(max / stufe) * stufe || stufe;
   const sk = v => hoehe - (v / max) * hoehe;
 
-  let svg = `<svg viewBox="0 0 ${breite} ${hoehe + 44}" width="${breite}" height="${hoehe + 44}">`;
-  // Gitterlinien
+  let svg = `<svg viewBox="0 0 ${breite} ${hoehe + 44}" width="${breite}"
+              height="${hoehe + 44}" role="img">`;
   for (let i = 0; i <= 4; i++) {
     const y = oben + (hoehe / 4) * i;
     const wert = Math.round(max - (max / 4) * i);
@@ -176,16 +219,15 @@ function balken(ziel, felder, farben) {
     svg += `<text x="${links - 6}" y="${y + 4}" text-anchor="end"
              font-size="10" fill="${farbe('--gedaempft')}">${wert}</text>`;
   }
-  // Balken
-  daten.forEach((d, i) => {
+  reihen.forEach((d, i) => {
     const x0 = links + i * (bw + luecke);
     const teil = bw / felder.length;
     felder.forEach((f, j) => {
       const h = hoehe - sk(d[f]);
-      const x = x0 + j * teil;
-      svg += `<rect x="${x}" y="${oben + sk(d[f])}" width="${teil - 1}"
-               height="${Math.max(h, 0)}" fill="${farbe(farben[j])}" rx="1.5">
-               <title>${d.datum} ${f}: ${d[f]} kWh</title></rect>`;
+      svg += `<rect x="${x0 + j * teil}" y="${oben + sk(d[f])}"
+               width="${teil - 1}" height="${Math.max(h, 0)}"
+               fill="${farbe(farben[j])}" rx="1.5">
+               <title>${d.datum}: ${d[f]} kWh</title></rect>`;
     });
     if (n <= 16 || i % 2 === 0) {
       svg += `<text x="${x0 + bw / 2}" y="${oben + hoehe + 16}"
@@ -199,13 +241,36 @@ function balken(ziel, felder, farben) {
   el.innerHTML = svg + '</svg>';
 }
 
-balken('d1', ['erzeugt', 'verbraucht'], ['--gruen', '--blau']);
-balken('d2', ['eingespeist', 'bezogen'], ['--orange', '--rot']);
-balken('d3', ['boiler'], ['--lila']);
+function zeichne() {
+  const reihen = ALLE[ebene];
+  const beschriftung = { tag: "Tag", monat: "Monat", jahr: "Jahr" }[ebene];
+  const zeitraum = { tag: `Letzte ${reihen.length} Tage`,
+                     monat: `${reihen.length} Monate`,
+                     jahr: `${reihen.length} Jahre` }[ebene];
+  document.getElementById("stand").textContent =
+    `${zeitraum} · Stand ${STAND} Uhr`;
+  document.getElementById("kopf-zeit").textContent = beschriftung;
+  zeichneKacheln(reihen);
+  balken("d1", reihen, ["erzeugt", "verbraucht"], ["--gruen", "--blau"]);
+  balken("d2", reihen, ["eingespeist", "bezogen"], ["--orange", "--rot"]);
+  balken("d3", reihen, ["geladen", "entladen"], ["--tuerkis", "--sand"]);
+  balken("d4", reihen, ["boiler"], ["--lila"]);
+  document.getElementById("tabelle").innerHTML = reihen.slice().reverse()
+    .map(d => `<tr><td>${ebene === "tag" ? d.wochentag + " " : ""}${d.datum}</td>
+      <td>${d.erzeugt.toFixed(1)}</td><td>${d.verbraucht.toFixed(1)}</td>
+      <td>${d.eingespeist.toFixed(1)}</td><td>${d.bezogen.toFixed(1)}</td>
+      <td>${d.geladen.toFixed(1)}</td><td>${d.entladen.toFixed(1)}</td>
+      <td>${d.boiler.toFixed(1)}</td></tr>`).join("");
+}
 
-document.getElementById('tabelle').innerHTML = daten.slice().reverse()
-  .map(d => `<tr><td>${d.wochentag} ${d.datum}</td>
-    <td>${d.erzeugt.toFixed(1)}</td><td>${d.verbraucht.toFixed(1)}</td>
-    <td>${d.eingespeist.toFixed(1)}</td><td>${d.bezogen.toFixed(1)}</td>
-    <td>${d.boiler.toFixed(1)}</td></tr>`).join('');
+document.querySelectorAll(".waehler button").forEach(b => {
+  b.addEventListener("click", () => {
+    ebene = b.dataset.ebene;
+    document.querySelectorAll(".waehler button").forEach(x =>
+      x.setAttribute("aria-pressed", String(x === b)));
+    zeichne();
+  });
+});
+
+zeichne();
 </script>
