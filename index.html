@@ -134,6 +134,20 @@
     <div class="diagramm" id="d4"></div>
   </div>
 
+  <div class="karte" id="verlauf-karte">
+    <h2 id="verlauf-titel">Tagesverlauf</h2>
+    <div class="legende">
+      <span><i class="punkt" style="background:var(--gruen)"></i>PV-Leistung</span>
+      <span><i class="punkt" style="background:var(--orange)"></i>Einspeisung</span>
+      <span><i class="punkt" style="background:var(--rot)"></i>Netzbezug</span>
+    </div>
+    <div class="diagramm" id="dv"></div>
+    <p style="font-size:.82rem;color:var(--gedaempft);margin:.8rem 0 0">
+      Durchschnittliche Leistung je Stunde. Die hellere Fl&auml;che zeigt den
+      h&ouml;chsten Wert der Stunde &ndash; kurze Spitzen verschwinden sonst
+      im Mittelwert.</p>
+  </div>
+
   <div class="karte">
     <h2>Alle Werte</h2>
     <div class="tabelle-huelle">
@@ -161,7 +175,8 @@
 
 <script>
 const ALLE = {"tag": [{"datum": "19.08.", "wochentag": "Mi", "erzeugt": 97.6, "verbraucht": 26.0, "eingespeist": 76.5, "bezogen": 4.9, "boiler": 0, "geladen": 4.9, "entladen": 3.9}, {"datum": "20.08.", "wochentag": "Do", "erzeugt": 33.4, "verbraucht": 46.0, "eingespeist": 9.3, "bezogen": 22.0, "boiler": 0, "geladen": 5.2, "entladen": 4.7}, {"datum": "21.08.", "wochentag": "Fr", "erzeugt": 12.9, "verbraucht": 20.8, "eingespeist": 1.3, "bezogen": 9.2, "boiler": 0, "geladen": 4.0, "entladen": 3.3}, {"datum": "22.08.", "wochentag": "Sa", "erzeugt": 62.6, "verbraucht": 39.9, "eingespeist": 28.8, "bezogen": 6.1, "boiler": 0, "geladen": 7.1, "entladen": 5.3}, {"datum": "23.08.", "wochentag": "So", "erzeugt": 94.9, "verbraucht": 37.9, "eingespeist": 60.6, "bezogen": 3.5, "boiler": 0, "geladen": 4.9, "entladen": 2.9}, {"datum": "24.08.", "wochentag": "Mo", "erzeugt": 85.8, "verbraucht": 27.2, "eingespeist": 60.9, "bezogen": 2.2, "boiler": 0, "geladen": 4.9, "entladen": 5.7}, {"datum": "25.08.", "wochentag": "Di", "erzeugt": 41.3, "verbraucht": 51.3, "eingespeist": 14.2, "bezogen": 24.3, "boiler": 0, "geladen": 7.6, "entladen": 7.0}, {"datum": "26.08.", "wochentag": "Mi", "erzeugt": 78.3, "verbraucht": 24.2, "eingespeist": 58.7, "bezogen": 4.6, "boiler": 0, "geladen": 5.2, "entladen": 3.8}, {"datum": "27.08.", "wochentag": "Do", "erzeugt": 70.9, "verbraucht": 62.7, "eingespeist": 31.9, "bezogen": 23.7, "boiler": 0, "geladen": 7.4, "entladen": 7.0}, {"datum": "28.08.", "wochentag": "Fr", "erzeugt": 32.9, "verbraucht": 30.2, "eingespeist": 10.9, "bezogen": 8.2, "boiler": 0, "geladen": 6.5, "entladen": 5.5}, {"datum": "29.08.", "wochentag": "Sa", "erzeugt": 81.9, "verbraucht": 34.0, "eingespeist": 51.8, "bezogen": 3.9, "boiler": 0, "geladen": 5.2, "entladen": 2.4}, {"datum": "30.08.", "wochentag": "So", "erzeugt": 89.8, "verbraucht": 62.9, "eingespeist": 38.3, "bezogen": 11.4, "boiler": 2.5, "geladen": 7.0, "entladen": 8.0}, {"datum": "31.08.", "wochentag": "Mo", "erzeugt": 62.9, "verbraucht": 69.5, "eingespeist": 26.2, "bezogen": 32.9, "boiler": 18.7, "geladen": 6.8, "entladen": 5.7}, {"datum": "01.09.", "wochentag": "Di", "erzeugt": 96.4, "verbraucht": 50.1, "eingespeist": 60.0, "bezogen": 13.7, "boiler": 14.1, "geladen": 5.3, "entladen": 4.5}, {"datum": "02.09.", "wochentag": "Mi", "erzeugt": 79.3, "verbraucht": 62.5, "eingespeist": 47.5, "bezogen": 30.6, "boiler": 11.6, "geladen": 5.5, "entladen": 4.7}, {"datum": "03.09.", "wochentag": "Do", "erzeugt": 72.1, "verbraucht": 64.2, "eingespeist": 34.0, "bezogen": 26.1, "boiler": 12.1, "geladen": 5.8, "entladen": 0.9}, {"datum": "04.09.", "wochentag": "Fr", "erzeugt": 95.3, "verbraucht": 37.8, "eingespeist": 67.8, "bezogen": 10.2, "boiler": 12.3, "geladen": 0.0, "entladen": 0.0}, {"datum": "05.09.", "wochentag": "Sa", "erzeugt": 27.8, "verbraucht": 20.2, "eingespeist": 15.5, "bezogen": 8.0, "boiler": 3.8, "geladen": 0.0, "entladen": 0.0}, {"datum": "06.09.", "wochentag": "So", "erzeugt": 94.8, "verbraucht": 34.5, "eingespeist": 67.7, "bezogen": 7.4, "boiler": 15.8, "geladen": 0.0, "entladen": 0.0}, {"datum": "07.09.", "wochentag": "Mo", "erzeugt": 51.7, "verbraucht": 27.7, "eingespeist": 33.2, "bezogen": 9.2, "boiler": 9.9, "geladen": 0, "entladen": 0}, {"datum": "08.09.", "wochentag": "Di", "erzeugt": 84.8, "verbraucht": 30.4, "eingespeist": 62.5, "bezogen": 8.0, "boiler": 10.4, "geladen": 0, "entladen": 0}, {"datum": "09.09.", "wochentag": "Mi", "erzeugt": 7.5, "verbraucht": 38.6, "eingespeist": 0.5, "bezogen": 31.6, "boiler": 0.0, "geladen": 0, "entladen": 0}, {"datum": "10.09.", "wochentag": "Do", "erzeugt": 42.6, "verbraucht": 48.7, "eingespeist": 19.3, "bezogen": 25.5, "boiler": 15.2, "geladen": 0, "entladen": 0}, {"datum": "11.09.", "wochentag": "Fr", "erzeugt": 89.6, "verbraucht": 47.2, "eingespeist": 53.4, "bezogen": 10.9, "boiler": 21.0, "geladen": 0, "entladen": 0}, {"datum": "12.09.", "wochentag": "Sa", "erzeugt": 95.1, "verbraucht": 59.5, "eingespeist": 55.0, "bezogen": 19.4, "boiler": 16.9, "geladen": 0, "entladen": 0}, {"datum": "13.09.", "wochentag": "So", "erzeugt": 73.1, "verbraucht": 50.8, "eingespeist": 43.5, "bezogen": 21.1, "boiler": 14.0, "geladen": 0, "entladen": 0}, {"datum": "14.09.", "wochentag": "Mo", "erzeugt": 90.0, "verbraucht": 39.5, "eingespeist": 60.5, "bezogen": 10.0, "boiler": 15.3, "geladen": 0, "entladen": 0}, {"datum": "15.09.", "wochentag": "Di", "erzeugt": 92.4, "verbraucht": 42.8, "eingespeist": 60.0, "bezogen": 10.4, "boiler": 18.2, "geladen": 0, "entladen": 0}, {"datum": "16.09.", "wochentag": "Mi", "erzeugt": 17.9, "verbraucht": 32.4, "eingespeist": 7.2, "bezogen": 21.6, "boiler": 5.1, "geladen": 0.1, "entladen": 0.0}, {"datum": "17.09.", "wochentag": "Do", "erzeugt": 68.0, "verbraucht": 42.8, "eingespeist": 30.0, "bezogen": 4.7, "boiler": 17.9, "geladen": 1.4, "entladen": 0.9}], "monat": [{"erzeugt": 450.2, "verbraucht": 0.0, "eingespeist": 359.5, "bezogen": 69.1, "boiler": 0.0, "geladen": 0.0, "entladen": 0.0, "datum": "Jun 26", "wochentag": "6 T"}, {"erzeugt": 2662.8, "verbraucht": 750.6, "eingespeist": 2043.2, "bezogen": 452.1, "boiler": 0.0, "geladen": 0.0, "entladen": 0.0, "datum": "Jul 26", "wochentag": "31 T"}, {"erzeugt": 2279.4, "verbraucht": 1167.2, "eingespeist": 1492.3, "bezogen": 379.8, "boiler": 21.2, "geladen": 82.8, "entladen": 70.3, "datum": "Aug 26", "wochentag": "31 T"}, {"erzeugt": 1178.4, "verbraucht": 729.7, "eingespeist": 717.6, "bezogen": 268.4, "boiler": 213.6, "geladen": 18.1, "entladen": 11.0, "datum": "Sep 26", "wochentag": "17 T"}], "jahr": [{"erzeugt": 6570.8, "verbraucht": 2647.5, "eingespeist": 4612.6, "bezogen": 1169.4, "boiler": 234.8, "geladen": 100.9, "entladen": 81.3, "datum": "2026", "wochentag": "85 T"}]};
-const STAND = "17.09.2026, 16:15";
+const VERLAUF = {"datum": "16.09.2026", "wochentag": "Mittwoch", "stunden": [{"pv": 0, "pv_max": 0, "pv_min": 0, "netz": -940, "netz_max": -781, "netz_min": -2867, "stunde": 0}, {"pv": 0, "pv_max": 0, "pv_min": 0, "netz": -768, "netz_max": -439, "netz_min": -857, "stunde": 1}, {"pv": 0, "pv_max": 0, "pv_min": 0, "netz": -739, "netz_max": -424, "netz_min": -843, "stunde": 2}, {"pv": 0, "pv_max": 0, "pv_min": 0, "netz": -714, "netz_max": -364, "netz_min": -856, "stunde": 3}, {"pv": 0, "pv_max": 0, "pv_min": 0, "netz": -736, "netz_max": -359, "netz_min": -896, "stunde": 4}, {"pv": 0, "pv_max": 0, "pv_min": 0, "netz": -684, "netz_max": -387, "netz_min": -796, "stunde": 5}, {"pv": 0, "pv_max": 0, "pv_min": 0, "netz": -759, "netz_max": -393, "netz_min": -2073, "stunde": 6}, {"pv": 125, "pv_max": 390, "pv_min": 0, "netz": -969, "netz_max": -200, "netz_min": -2847, "stunde": 7}, {"pv": 829, "pv_max": 3263, "pv_min": 360, "netz": -39, "netz_max": 2446, "netz_min": -1425, "stunde": 8}, {"pv": 2337, "pv_max": 5952, "pv_min": 876, "netz": 1644, "netz_max": 5318, "netz_min": -999, "stunde": 9}, {"pv": 5930, "pv_max": 10119, "pv_min": 1220, "netz": 778, "netz_max": 5778, "netz_min": -8462, "stunde": 10}, {"pv": 2397, "pv_max": 12305, "pv_min": 820, "netz": -2391, "netz_max": 7872, "netz_min": -11075, "stunde": 11}, {"pv": 1664, "pv_max": 2435, "pv_min": 785, "netz": -428, "netz_max": 1747, "netz_min": -5097, "stunde": 12}, {"pv": 1802, "pv_max": 3436, "pv_min": 880, "netz": 831, "netz_max": 2770, "netz_min": -3590, "stunde": 13}, {"pv": 2373, "pv_max": 3879, "pv_min": 1330, "netz": 1654, "netz_max": 3274, "netz_min": -306, "stunde": 14}, {"pv": 318, "pv_max": 1343, "pv_min": 121, "netz": -1073, "netz_max": 720, "netz_min": -3070, "stunde": 15}, {"pv": 67, "pv_max": 216, "pv_min": 0, "netz": -2068, "netz_max": -472, "netz_min": -4637, "stunde": 16}, {"pv": 13, "pv_max": 65, "pv_min": 0, "netz": -1900, "netz_max": -530, "netz_min": -4657, "stunde": 17}, {"pv": 0, "pv_max": 0, "pv_min": 0, "netz": -1362, "netz_max": -560, "netz_min": -2566, "stunde": 18}, {"pv": 0, "pv_max": 0, "pv_min": 0, "netz": -597, "netz_max": -402, "netz_min": -2393, "stunde": 19}, {"pv": 0, "pv_max": 0, "pv_min": 0, "netz": -836, "netz_max": -549, "netz_min": -1188, "stunde": 20}, {"pv": 0, "pv_max": 0, "pv_min": 0, "netz": -859, "netz_max": -563, "netz_min": -2554, "stunde": 21}, {"pv": 0, "pv_max": 0, "pv_min": 0, "netz": -824, "netz_max": -615, "netz_min": -2967, "stunde": 22}, {"pv": 0, "pv_max": 0, "pv_min": 0, "netz": -673, "netz_max": -549, "netz_min": -884, "stunde": 23}]};
+const STAND = "17.09.2026, 16:20";
 let ebene = "tag";
 
 function farbe(n) {
@@ -241,6 +256,84 @@ function balken(ziel, reihen, felder, farben) {
   el.innerHTML = svg + '</svg>';
 }
 
+function zeichneVerlauf() {
+  const el = document.getElementById("dv");
+  const st = VERLAUF.stunden;
+  document.getElementById("verlauf-titel").textContent =
+    "Tagesverlauf – " + VERLAUF.wochentag + ", " + VERLAUF.datum;
+
+  // Skala: PV nach oben, Netz in beide Richtungen (Einspeisung positiv)
+  let max = 0, min = 0;
+  st.forEach(h => {
+    max = Math.max(max, h.pv_max || 0, h.pv || 0, h.netz_max || 0, h.netz || 0);
+    min = Math.min(min, h.netz_min || 0, h.netz || 0);
+  });
+  const stufe = 1000;
+  max = Math.ceil(max / stufe) * stufe || stufe;
+  min = Math.floor(min / stufe) * stufe;
+  const spanne = max - min || stufe;
+
+  const bw = 26, luecke = 7, links = 52, oben = 14, hoehe = 220;
+  const breite = links + 24 * (bw + luecke) + 14;
+  const y = v => oben + hoehe - ((v - min) / spanne) * hoehe;
+  const null_y = y(0);
+
+  let svg = '<svg viewBox="0 0 ' + breite + ' ' + (hoehe + 40) + '" width="'
+    + breite + '" height="' + (hoehe + 40) + '" role="img">';
+
+  // Gitter
+  for (let w = min; w <= max; w += stufe) {
+    svg += '<line x1="' + links + '" y1="' + y(w) + '" x2="' + (breite - 8)
+      + '" y2="' + y(w) + '" stroke="' + farbe('--rand')
+      + '" stroke-width="' + (w === 0 ? 1.6 : 1) + '"/>';
+    svg += '<text x="' + (links - 6) + '" y="' + (y(w) + 4)
+      + '" text-anchor="end" font-size="10" fill="' + farbe('--gedaempft')
+      + '">' + (w / 1000) + '</text>';
+  }
+  svg += '<text x="' + (links - 6) + '" y="' + (oben - 4)
+    + '" text-anchor="end" font-size="9" fill="' + farbe('--gedaempft')
+    + '">kW</text>';
+
+  st.forEach((h, i) => {
+    const x = links + i * (bw + luecke);
+    const pv = h.pv || 0, pvMax = h.pv_max || 0;
+    const netz = h.netz || 0;
+
+    // PV: Maximum blass, Mittel kraeftig
+    if (pvMax > 0) {
+      svg += '<rect x="' + x + '" y="' + y(pvMax) + '" width="' + bw
+        + '" height="' + Math.max(null_y - y(pvMax), 0) + '" fill="'
+        + farbe('--gruen') + '" opacity=".22" rx="1.5"/>';
+    }
+    if (pv > 0) {
+      svg += '<rect x="' + x + '" y="' + y(pv) + '" width="' + bw
+        + '" height="' + Math.max(null_y - y(pv), 0) + '" fill="'
+        + farbe('--gruen') + '" rx="1.5"><title>' + h.stunde
+        + ' Uhr: PV ' + pv + ' W (max ' + pvMax + ')</title></rect>';
+    }
+
+    // Netz: schmaler Strich in der Mitte, Farbe nach Richtung
+    const nb = 9, nx = x + (bw - nb) / 2;
+    if (netz !== 0) {
+      const oberkante = netz > 0 ? y(netz) : null_y;
+      const hoeheN = Math.abs(null_y - y(netz));
+      svg += '<rect x="' + nx + '" y="' + oberkante + '" width="' + nb
+        + '" height="' + Math.max(hoeheN, 1) + '" fill="'
+        + farbe(netz > 0 ? '--orange' : '--rot') + '" rx="1"><title>'
+        + h.stunde + ' Uhr: '
+        + (netz > 0 ? 'Einspeisung ' + netz : 'Bezug ' + Math.abs(netz))
+        + ' W</title></rect>';
+    }
+
+    if (i % 3 === 0) {
+      svg += '<text x="' + (x + bw / 2) + '" y="' + (oben + hoehe + 16)
+        + '" text-anchor="middle" font-size="9.5" fill="'
+        + farbe('--gedaempft') + '">' + h.stunde + '</text>';
+    }
+  });
+  el.innerHTML = svg + '</svg>';
+}
+
 function zeichne() {
   const reihen = ALLE[ebene];
   const beschriftung = { tag: "Tag", monat: "Monat", jahr: "Jahr" }[ebene];
@@ -255,6 +348,9 @@ function zeichne() {
   balken("d2", reihen, ["eingespeist", "bezogen"], ["--orange", "--rot"]);
   balken("d3", reihen, ["geladen", "entladen"], ["--tuerkis", "--sand"]);
   balken("d4", reihen, ["boiler"], ["--lila"]);
+  document.getElementById("verlauf-karte").style.display =
+    ebene === "tag" ? "" : "none";
+  if (ebene === "tag") zeichneVerlauf();
   document.getElementById("tabelle").innerHTML = reihen.slice().reverse()
     .map(d => `<tr><td>${ebene === "tag" ? d.wochentag + " " : ""}${d.datum}</td>
       <td>${d.erzeugt.toFixed(1)}</td><td>${d.verbraucht.toFixed(1)}</td>
